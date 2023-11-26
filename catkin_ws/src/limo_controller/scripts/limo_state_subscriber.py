@@ -13,3 +13,5 @@ if __name__ == '__main__':
     rospy.loginfo("Node has been started.")
 
     sub = rospy.Subscriber(TOPIC, String, callback=state_callback)
+
+    rospy.spin()
