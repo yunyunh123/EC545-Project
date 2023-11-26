@@ -1,8 +1,0 @@
-prefix=C:/Users/jhua6/Documents/School_Work/EC545-Project/catkin_ws/devel
-
-Name: limo_controller
-Description: Description of limo_controller
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

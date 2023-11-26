@@ -1,2 +1,0 @@
-limo_controller
--DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=C:\Users\jhua6\Documents\School_Work\EC545-Project\catkin_ws\devel -DCMAKE_INSTALL_PREFIX=C:\Users\jhua6\Documents\School_Work\EC545-Project\catkin_ws\install -G Ninja
