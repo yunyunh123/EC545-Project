@@ -9,7 +9,10 @@ Run the following commands:
 * C:\opt\ros\<ROS_distribution>\x64\setup.bat  
 
 3) Set up project: run either of the 2 commands
-* source ./devel/setup.bat  
-* .\devel\setup.bat  
+* source ./devel/setup.bash  
+* .\devel\setup.bat
+
+## Run code
+
 
 
