@@ -3,9 +3,8 @@ import rospy
 from std_msgs.msg import String
 from pylimo import limo
 
-__DEBUG__ = True
-
 NODE = "limo_node"
+LIMO_ID = 1
 
 TOPIC_FOL = "/limo/follower_state"
 TOPIC_LDR = "/limo/leader_state"
@@ -14,16 +13,22 @@ RATE_HZ = 2
     
 
 def leader_state_callback(msg: String):
-    rospy.loginfo(msg)
-
-def getCurrentState(mylimo):
+    print(msg)
+    #leader_state = str(msg).split(";")
+    #ldr_id = leader_state[0].replace("data: ", "")#int(leader_state[0])
+    #lin_vel = float(leader_state[1])
+    #steer_angle = float(leader_state[2])
+    #print(leader_state) #ldr_id, lin_vel, steer_angle)
+    
+def getCurrentState(mylimo, id):
     lin_vel = mylimo.GetLinearVelocity()
     ang_vel = mylimo.GetAngularVelocity()
     steer_angle = mylimo.GetSteeringAngle()
-    return str(lin_vel) + ";" + str(steer_angle)
+    return str(id) + ";" + str(lin_vel) + ";" + str(steer_angle)
 
 
 if __name__ == '__main__':
+
     # Set up ros
     rospy.init_node(NODE)
     rospy.loginfo("Limo node has been started.")
@@ -36,10 +41,5 @@ if __name__ == '__main__':
     mylimo.EnableCommand()
 
     while not rospy.is_shutdown():
-        if __DEBUG__:
-            pub.publish("Hello central controller!")
-        else:
-            pub.publish(getCurrentState(mylimo))
-            
-            
+        pub.publish(getCurrentState(mylimo, LIMO_ID))                
         rate.sleep()
