@@ -3,9 +3,9 @@ import rospy
 from std_msgs.msg import String
 from pylimo import limo
 
-LIMO_ID = 1
-
+LIMO_ID = 0
 NODE = "limo_node"
+
 TOPIC = "/limo/state"
 QUEUE_SZ = 10
 RATE_HZ = 5
@@ -28,7 +28,7 @@ def getCurrentState(mylimo, id):
 if __name__ == '__main__':
 
     # Set up ros
-    rospy.init_node(NODE)
+    rospy.init_node(NODE + str(LIMO_ID))
     rospy.loginfo("Limo node has been started.")
     pub = rospy.Publisher(TOPIC, String, queue_size=QUEUE_SZ)
     if LIMO_ID != 0:
