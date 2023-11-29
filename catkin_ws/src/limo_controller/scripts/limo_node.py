@@ -8,10 +8,17 @@ LIMO_ID = 1
 NODE = "limo_node"
 TOPIC = "/limo/state"
 QUEUE_SZ = 10
-RATE_HZ = 2
+RATE_HZ = 5
     
 def state_callback(msg: String):
-    print("Received: ", msg)
+    msg = str(msg)
+    msg = msg.replace('"', '').replace("data: ", "")
+    id, lin_vel, steer_angle = msg.split(";")
+    
+    isLeader = int(id) == (LIMO_ID - 1)
+    if isLeader:
+        mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
+    print("Received: ", id, lin_vel, steer_angle)
 
 def getCurrentState(mylimo, id):
     lin_vel = mylimo.GetLinearVelocity()
@@ -24,7 +31,8 @@ if __name__ == '__main__':
     rospy.init_node(NODE)
     rospy.loginfo("Limo node has been started.")
     pub = rospy.Publisher(TOPIC, String, queue_size=QUEUE_SZ)
-    sub = rospy.Subscriber(TOPIC, String, callback=state_callback)
+    if LIMO_ID != 0:
+        sub = rospy.Subscriber(TOPIC, String, callback=state_callback)
     rate = rospy.Rate(RATE_HZ)
 
     # Set up limo
