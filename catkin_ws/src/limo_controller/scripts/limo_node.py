@@ -5,7 +5,7 @@ from sensor_msgs.msg import LaserScan
 from pylimo import limo
 import math
 
-from get_lidar_data import *
+from adjust_speed import *
 
 LIMO_ID = 1
 NODE = "limo_node"
@@ -23,9 +23,9 @@ def state_callback(msg: String):
     msg = msg.replace('"', '').replace("data: ", "")
     id, lin_vel, steer_angle = msg.split(";")
     
-    isLeader = int(id) == (LIMO_ID - 1)
-    if isLeader:
-        mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
+    #isLeader = int(id) == (LIMO_ID - 1)
+    #if isLeader:
+    #    mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
     
     if DEBUG_STATE:
         print("Received: ", id, lin_vel, steer_angle)
@@ -50,6 +50,12 @@ if __name__ == '__main__':
     mylimo = limo.LIMO()
     mylimo.EnableCommand()
 
+    prevError = 0
+    integral = 0
     while not rospy.is_shutdown():
-        pub_state.publish(getCurrentState(mylimo, LIMO_ID))                
+        pub_state.publish(getCurrentState(mylimo, LIMO_ID))         
+
+        adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
+        prevError = error
+
         rate.sleep()
