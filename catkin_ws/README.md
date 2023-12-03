@@ -23,6 +23,9 @@ Run the following commands:
 * export ROS_IP=Y.Y.Y.Y
 
 ## Run code
+1) Get LiDAR data
+* roslaunch ydlidar_ros X2L.launch
+* rosrun ydlidar_ros ydlidar_client
 
 ## Potential errors and solutions
 1) catkin_make
