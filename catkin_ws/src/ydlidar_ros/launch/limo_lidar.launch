@@ -11,7 +11,7 @@
     <param name="range_min"    type="double" value="0.1" />
     <param name="range_max"    type="double" value="12.0" />
     <param name="ignore_array" type="string" value="" />
-    <param name="frequency"    type="double" value="8"/>
+    <param name="frequency"    type="double" value="6"/>
     <param name="samp_rate"    type="int"    value="3"/>
     <param name="isSingleChannel"    type="bool"   value="true"/>
   </node>
