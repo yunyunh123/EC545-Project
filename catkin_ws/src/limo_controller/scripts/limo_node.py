@@ -7,7 +7,7 @@ import math
 
 from adjust_speed import *
 
-LIMO_ID = 1
+LIMO_ID = 0
 NODE = "limo_node"
 
 TOPIC_STATE = "/limo/state"
@@ -15,7 +15,9 @@ TOPIC_LIDAR = "/scan"
 
 QUEUE_SZ = 10
 RATE_HZ = 5
-    
+
+MAX_SPEED = 1.0
+
 DEBUG_STATE = False
 
 def state_callback(msg: String):
@@ -57,5 +59,12 @@ if __name__ == '__main__':
 
         adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
         prevError = error
+        newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
+
+        if newSpeed > MAX_SPEED:
+            newSpeed = MAX_SPEED
+        elif newSpeed < (-1 * MAX_SPEED):
+            newSpeed = -1 * MAX_SPEED
+        #mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
         rate.sleep()

@@ -61,7 +61,7 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    print(distance, output, adjustSpeed)
+    print(distance,adjustSpeed)
 
     return adjustSpeed, error, integral
 
