@@ -64,12 +64,3 @@ def pid(rate_hz, prevError, prevIntegral):
     print(distance, output, adjustSpeed)
 
     return adjustSpeed, error, integral
-
-    
-            
-
-        
-        
-
-
-                
