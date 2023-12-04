@@ -3,6 +3,7 @@ from sensor_msgs.msg import LaserScan
 
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
+TURN_ANGLE_RANGE = 30
 
 SETPT = 0.3
 MIN_DIST = 0.15
@@ -21,6 +22,8 @@ def rad2deg(x):
 def scan_callback(scan):
     count = math.floor(scan.scan_time / scan.time_increment)
     distances = []
+
+    turnDistances = []
     
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
@@ -33,6 +36,15 @@ def scan_callback(scan):
 
             if DEBUG_LIDAR:
                 print(degree, dist, i)
+
+        # Get LiDAR data from wider range
+        if degree >= (-1 * TURN_ANGLE_RANGE) and degree < TURN_ANGLE_RANGE:
+            dist = scan.ranges[i]
+            if dist > 0:
+                turnDistances.append(dist)
+
+            if DEBUG_LIDAR:
+                print(degree, dist, i)
     
     # Average the data
     mean = 0
@@ -41,6 +53,11 @@ def scan_callback(scan):
 
     global distance
     distance = mean
+
+    # Calculate the steering angle each datapoint is relative to
+    
+    distAngleArray = []
+
 
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
