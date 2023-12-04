@@ -1,9 +1,10 @@
 import math
-# from sensor_msgs.msg import LaserScan
-# from limo_node import getCurrentState 
+from sensor_msgs.msg import LaserScan
 
-DEBUG_STATE = False
+from limo_node import getCurrentState
+from adjust_speed import rad2deg
 
+DEBUG_TURN = False
 ANGLE_RANGE = 30
 
 def pidNaiveTurn(mylimo, LIMO_ID):
@@ -11,12 +12,11 @@ def pidNaiveTurn(mylimo, LIMO_ID):
     # this is a naive implementation, may need tweaks to error correct if off course
 
     # Get steering angle 
-    current_state_msg = "121" + ";" + "5" + ";" + "70" # test line
-    # current_state_msg = getCurrentState(mylimo, LIMO_ID)
+    current_state_msg = getCurrentState(mylimo, LIMO_ID)
     stateValues = current_state_msg.split(";")
     steeringAngle = stateValues[-1]
 
-    if DEBUG_STATE:
+    if DEBUG_TURN:
         print("SteeringAngle:", steeringAngle)
 
     return steeringAngle
