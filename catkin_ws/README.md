@@ -35,6 +35,6 @@ Run the following commands:
 ## Debug Tools
 1) rostopic list
 2) rostopic echo /[topic]
-  * rosout topic dumps all data logged in nodes (rospy.loginfo())
+   - rosout topic dumps all data logged in nodes (rospy.loginfo())
 4) rostopic pub \<topic-name\> \<topic-type\> \[data...\]
 
