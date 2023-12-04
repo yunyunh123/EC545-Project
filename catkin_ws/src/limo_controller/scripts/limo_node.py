@@ -6,7 +6,6 @@ from pylimo import limo
 import math
 
 from adjust_speed import *
-from limo_turn import *
 
 LIMO_ID = 1
 NODE = "limo_node"
@@ -42,7 +41,6 @@ if __name__ == '__main__':
     rospy.init_node(NODE + str(LIMO_ID))
     rospy.loginfo("Limo node has been started.")
     pub_state = rospy.Publisher(TOPIC_STATE, String, queue_size=QUEUE_SZ)
-    
     if LIMO_ID != 0:
         sub_state = rospy.Subscriber(TOPIC_STATE, String, callback=state_callback)
         sub_lidar = rospy.Subscriber(TOPIC_LIDAR, LaserScan, callback=scan_callback)
@@ -59,7 +57,5 @@ if __name__ == '__main__':
 
         adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
         prevError = error
-
-        #add adjust steering angle call here
 
         rate.sleep()
