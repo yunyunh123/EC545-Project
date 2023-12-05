@@ -3,7 +3,9 @@ from sensor_msgs.msg import LaserScan
 
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
-TURN_ANGLE_RANGE = 30
+TURN_ANGLE_RANGE = 30 # degrees
+
+WHEELBASE = 8 # inches
 
 SETPT = 0.3
 MIN_DIST = 0.15
@@ -18,11 +20,21 @@ distance = 0
 def rad2deg(x):
     return (x * 180.0) / math.pi
 
+def ackermannSteeringAngle(turn_radius):
+    # NOT CORRECT
+
+    # Calculate Ackermann steering angle in radians
+    delta_radians = math.atan(WHEELBASE / turn_radius)
+
+    # Convert radians to degrees
+    delta_degrees = math.degrees(delta_radians)
+
+    return delta_degrees
+
 # Get lidar data
 def scan_callback(scan):
     count = math.floor(scan.scan_time / scan.time_increment)
     distances = []
-
     turnDistances = []
     
     for i in range(count):
@@ -54,8 +66,17 @@ def scan_callback(scan):
     global distance
     distance = mean
 
-    # Calculate the steering angle each datapoint is relative to
+    # ----- Turning implementation 
+    # Calculate the degree each datapoint is relative to and insert into a data structure
+    totalDegreesCovered = TURN_ANGLE_RANGE * 2
+    distBetweenMeasurements = totalDegreesCovered / (len(turnDistances) - 1)
+
+
+    # Calculate the what datapoints are the closest (ex. 90% closest datapoints)
+
+    # Average the steering angle towards these datapoints to get the needed steering angle
     
+
     distAngleArray = []
 
 

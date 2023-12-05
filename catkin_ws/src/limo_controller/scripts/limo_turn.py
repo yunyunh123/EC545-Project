@@ -23,12 +23,11 @@ def pidNaiveTurn(mylimo, LIMO_ID):
 
 def pidTurn(mylimo, LIMO_ID):
     # this function implements error correction for turning using lidar readings
-
-    
+    # implementation currently being written in adjust_speed.py scan_callback
 
     return 0
 
 # test code
 if __name__ == '__main__':
     #testState = "121" + ";" + "5" + ";" + "70"
-    pidNaiveTurn("1", "12")
+    pidNaiveTurn("1", "1")
