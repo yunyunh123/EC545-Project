@@ -1,8 +1,17 @@
 import numpy as np
 
 
-TURN_ANGLE_RANGE = 30 # degrees
+LEFT_SENSOR_VAL = .085956 # all positive values are left
+RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
+
+TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
+
+'''
+Check if scan is done clockwise or counterclockwise.
+Check maximum turn radius of limo
+
+'''
 
 
 def main(turnDistances):
@@ -19,7 +28,7 @@ def main(turnDistances):
     turnAngle = TURN_ANGLE_RANGE * -1
     for index, dataPoint in enumerate(turnDistances):
         """
-        Caculation here.
+        Calculation here.
         """
         
         # REPLACE WITH CALCULATED EQUATION RESULT - Currently saves degrees of each value
