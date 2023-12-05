@@ -12,13 +12,8 @@ LIMO_ID = 1
 NODE = "limo_node"
 
 TOPIC_STATE = "/limo/state"
-<<<<<<< HEAD
-TOPIC_LIDAR = "/scan"
 TOPIC_STOP = "/stop"
-=======
 TOPIC_LIDAR = "/scan_" + str(LIMO_ID)
-
->>>>>>> e6f88a0b01eb10c0addadb91937ebca0d971c3e8
 QUEUE_SZ = 10
 RATE_HZ = 5
 
@@ -33,19 +28,15 @@ def state_callback(msg: String):
     msg = msg.replace('"', '').replace("data: ", "")
     id, lin_vel, steer_angle = msg.split(";")
     
-<<<<<<< HEAD
     '''
     isLeader = int(id) == (LIMO_ID - 1)
     if isLeader:
         print("Here: ", id, lin_vel, steer_angle)
         mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
     '''
-=======
     isLeader = int(id) == (LIMO_ID - 1)
     if isLeader:
         mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
-    
->>>>>>> e6f88a0b01eb10c0addadb91937ebca0d971c3e8
     if DEBUG_STATE:
         print("Received: ", id, lin_vel, steer_angle)
 
@@ -92,8 +83,8 @@ if __name__ == '__main__':
             newSpeed = 0
         elif newSpeed > MAX_SPEED:
             newSpeed = MAX_SPEED
-        elif newSpeed < (-1 * MAX_SPEED):
-            newSpeed = -1 * MAX_SPEED
-        #mylimo.SetMotionCommand(linear_vel=float(newSpeed))
+        elif newSpeed < (0):
+            newSpeed = 0
+        mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
         rate.sleep()
