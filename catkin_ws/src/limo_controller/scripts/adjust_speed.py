@@ -4,6 +4,7 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 TURN_ANGLE_RANGE = 30 # degrees
+TURN_CLOSEST_PERCENT = 10 # percent
 
 WHEELBASE = 8 # inches
 
@@ -16,6 +17,7 @@ Ki = 0 # Integral constant
 Kd = 1.5 # Derivative constant
 
 distance = 0
+steeringAngle = 0
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -67,20 +69,45 @@ def scan_callback(scan):
     distance = mean
 
     # ----- Turning implementation 
-    # Calculate the degree each datapoint is relative to and insert into a data structure
+    # Declare variables for the implementation
+    steeringMatrix = np.empty(len(turnDistances)) # array that holds steering angle with same indexes as the turn distances
+
+    # Calculate the degree each datapoint is relative
     totalDegreesCovered = TURN_ANGLE_RANGE * 2
     distBetweenMeasurements = totalDegreesCovered / (len(turnDistances) - 1)
+    
+    # Calculate the steering angle towards each datapoint and insert into an array
 
+    turnAngle = TURN_ANGLE_RANGE * -1
+    for index, dataPoint in enumerate(turnDistances):
+        """
+        Caculation here.
+        """
+        
+        # REPLACE WITH CALCULATED EQUATION RESULT - Currently saves degrees of each value
+        steeringMatrix[index] = turnAngle 
+        turnAngle = turnAngle + distBetweenMeasurements
 
-    # Calculate the what datapoints are the closest (ex. 90% closest datapoints)
+    # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
+    numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
+    sortedDistances = sorted(turnDistances)
+    closestDistances = sortedDistances[:numCloseValues]
+
+    indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
 
     # Average the steering angle towards these datapoints to get the needed steering angle
-    
+    closestAngles = []
+    for index in indexArr:
+        closestAngles.append(steeringMatrix[index])
 
-    distAngleArray = []
+    global steeringAngle
+    steeringAngle = sum(closestAngles)/len(closestAngles)
+    
+    
 
 
 def pid(rate_hz, prevError, prevIntegral):
+
     error = SETPT - distance
 
     # PID algorithm
