@@ -47,8 +47,12 @@ def scan_callback(scan):
         distance = lastNZdist
 
 def pid(rate_hz, prevError, prevIntegral):
-    error = SETPT - distance
-
+    if distance < MIN_DIST: 
+        error = MIN_DIST - distance
+    elif distance > MAX_DIST:
+        error =  MAX_DIST - distance
+    else:
+        error = 0
     # PID algorithm
     proportional = error
     integral = prevIntegral + error
