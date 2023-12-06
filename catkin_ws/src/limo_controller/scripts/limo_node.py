@@ -61,6 +61,7 @@ if __name__ == '__main__':
     rospy.loginfo("Limo node " + NODE + str(LIMO_ID) + " has been started.")
     pub_state = rospy.Publisher(TOPIC_STATE, String, queue_size=QUEUE_SZ)
     print("Publishing to: ", TOPIC_STATE)
+
     if not ULT_LDR:
         print("Subscribing to: ", TOPIC_STATE, ", ", TOPIC_LIDAR)
         sub_state = rospy.Subscriber(TOPIC_STATE, String, callback=state_callback)
@@ -82,7 +83,7 @@ if __name__ == '__main__':
         if not ULT_LDR:
             steeringAngle, adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
             prevError = error
-            
+
             #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
             newSpeed = leaderSpeed + adjustSpeed
             if STOP:
@@ -95,8 +96,5 @@ if __name__ == '__main__':
             print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
             print("{New Steering Angle}: ", steeringAngle)
 
-            mylimo.SetMotionCommand(linear_vel=float(newSpeed))
-            mylimo.SetMotionCommand(steering_angle=float(steeringAngle))
-
-
+            mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle=float(steeringAngle))
         rate.sleep()

@@ -64,10 +64,15 @@ def scan_callback(scan):
         distance = lastNZdist
 
     print("Distance: ", distance)
+
     # ----- Turning implementation 
     # Declare variables for the implementation
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
-    numHalfTurnAngle = int(int(len(turnDistances))/2)
+    
+    try:
+        numHalfTurnAngle = int(len(turnDistances) / 2)
+    except ZeroDivisionError:
+        numHalfTurnAngle = 0 
     
     # Calculate the distances for the right and left sides of the data set
     distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
@@ -101,7 +106,6 @@ def scan_callback(scan):
     steeringAngle = sum(closestAngles)/len(closestAngles)
     print("[Steering Angle]: ", steeringAngle)
     
-
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
 
