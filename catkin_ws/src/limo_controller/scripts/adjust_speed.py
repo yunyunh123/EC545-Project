@@ -76,6 +76,9 @@ def scan_callback(scan):
         distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
     except ZeroDivisionError:
         numHalfTurnAngle = 0 
+        distBetweenMeasurementsLeft = 0
+        distBetweenMeasurementsRight = 0
+    
     
     # Calculate the steering angle towards each datapoint and insert into an array
     turnAngle = LEFT_SENSOR_VAL
