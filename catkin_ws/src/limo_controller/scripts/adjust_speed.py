@@ -4,13 +4,13 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
-SETPT = 0.3
-MIN_DIST = 0.15
-MAX_DIST = 0.45
+SETPT = 0.4
+MIN_DIST = SETPT - 0.15
+MAX_DIST = SETPT + 0.15
 
 Kp = 0.7 # Proportional constant
-Ki = 0 # Integral constant
-Kd = 1.5 # Derivative constant
+Ki = 0.04 # Integral constant
+Kd = 0.30 # Derivative constant
 
 distance = 0
 
@@ -30,7 +30,6 @@ def scan_callback(scan):
             dist = scan.ranges[i]
             if dist > 0:
                 distances.append(dist)
-
             if DEBUG_LIDAR:
                 print(degree, dist, i)
     
@@ -38,9 +37,14 @@ def scan_callback(scan):
     mean = 0
     if len(distances) > 0:
         mean = sum(distances) / len(distances)
-
+    global lastNZdist
     global distance
-    distance = mean
+    #distance = mean
+    if mean>0:
+        distance = mean
+        lastNZdist = mean
+    else:
+        distance = lastNZdist
 
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
@@ -61,7 +65,7 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    print(distance, output, adjustSpeed)
+    print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     return adjustSpeed, error, integral
 
