@@ -5,8 +5,8 @@ DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
 SETPT = 0.4
-MIN_DIST = SETPT - 0.15
-MAX_DIST = SETPT + 0.15
+MIN_DIST = SETPT - 0.02
+MAX_DIST = SETPT + 0.02
 
 Kp = 0.7 # Proportional constant
 Ki = 0.04 # Integral constant
@@ -55,7 +55,7 @@ def pid(rate_hz, prevError, prevIntegral):
         error = 0
     # PID algorithm
     proportional = error
-    integral = prevIntegral + error
+    integral =min(prevIntegral + error,1)
     derivative = error - prevError
     output = Kp * proportional + Ki * integral + Kd * derivative
 

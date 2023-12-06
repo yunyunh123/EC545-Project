@@ -8,7 +8,7 @@ import math
 
 from adjust_speed import *
 
-LIMO_ID = 2
+LIMO_ID = 1
 NODE = "limo_node"
 
 TOPIC_STATE = "/limo/state"
