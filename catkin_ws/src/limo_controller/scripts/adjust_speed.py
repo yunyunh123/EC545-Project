@@ -91,13 +91,15 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    #print("[Distance, Adjustment]: ", distance,adjustSpeed)
+    print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     return adjustSpeed, error, integral
 
 def adjust_angle():
-    newAngle = 0
+    if len(closest_distances) == 0:
+        return None
 
+    newAngle = 0
     while len(closest_distances) > 7:
         closest_distances.pop(0)
         closest_degrees.pop(0)
@@ -110,6 +112,6 @@ def adjust_angle():
     # potentially set degree to 0 if its within "front" range
 
     newAngle = ave_closest_degree / 60.0
-    print("[new angle, average closest degree]: ", newAngle, ave_closest_degree)
+    #print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
     return float(newAngle)
 

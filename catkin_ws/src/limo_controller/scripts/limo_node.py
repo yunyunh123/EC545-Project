@@ -95,6 +95,8 @@ if __name__ == '__main__':
                 newSpeed = -MAX_SPEED #0
 
             #print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
+
+            '''
             if DEBUG_ADJUST_SPEED:
                 mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
@@ -104,8 +106,11 @@ if __name__ == '__main__':
                 print(newAngle)
                 mylimo.SetMotionCommand(steering_angle=newAngle)
             #print(mylimo.GetSteeringAngle())
-
-            mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle = newAngle)
+            '''
+        
+            newAngle = adjust_angle()
+            if newAngle:
+                mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle = newAngle)
 
 
 
