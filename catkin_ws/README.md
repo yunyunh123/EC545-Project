@@ -32,4 +32,9 @@ Run the following commands:
 * Error: CMake Error at CMakeLists.txt: Parse error. Expected a command name, got unquoted argument.
 * Soln: Remove catkin_ws/src/CMakeLists.txt
 
+## Debug Tools
+1) rostopic list
+2) rostopic echo /[topic]
+   - rosout topic dumps all data logged in nodes (rospy.loginfo())
+4) rostopic pub \<topic-name\> \<topic-type\> \[data...\]
 
