@@ -19,7 +19,6 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
-steeringAngle = None
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -98,6 +97,7 @@ def scan_callback(scan):
 
     global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
+    print("[steeringAngle]: ", steeringAngle)
     
 
 def pid(rate_hz, prevError, prevIntegral):
