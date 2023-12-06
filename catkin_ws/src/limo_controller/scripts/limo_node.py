@@ -80,7 +80,7 @@ if __name__ == '__main__':
         pub_state.publish(getCurrentState(mylimo, LIMO_ID))
 
         if not ULT_LDR:
-            adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
+            steeringAngle, adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
             prevError = error
             #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
             newSpeed = leaderSpeed + adjustSpeed
@@ -93,5 +93,7 @@ if __name__ == '__main__':
 
             print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
             mylimo.SetMotionCommand(linear_vel=float(newSpeed))
+            mylimo.SetMotionCommand(steering_angle=float(steeringAngle))
+
 
         rate.sleep()
