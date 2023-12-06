@@ -19,7 +19,7 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
-steeringAngle = 0
+global steeringAngle
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -63,43 +63,6 @@ def scan_callback(scan):
     else:
         distance = lastNZdist
 
-# ----- Turning implementation 
-    # Declare variables for the implementation
-    steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
-    numHalfTurnAngle = int(int(len(turnDistances))/2)
-    
-    # Calculate the distances for the right and left sides of the data set
-    distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
-    distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
-    
-    # Calculate the steering angle towards each datapoint and insert into an array
-    turnAngle = LEFT_SENSOR_VAL
-    for index, dataPoint in enumerate(turnDistances):
-        steeringMatrix[index] = turnAngle
-
-        if index < numHalfTurnAngle: # handle the left side
-            turnAngle = turnAngle - distBetweenMeasurementsLeft
-        elif index > numHalfTurnAngle: # handle the right side
-            turnAngle = turnAngle + distBetweenMeasurementsRight
-        elif index == numHalfTurnAngle: # handle the center
-            turnAngle = 0
-
-    # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
-    numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
-    sortedDistances = sorted(turnDistances)
-    closestDistances = sortedDistances[:numCloseValues]
-
-    indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
-
-    # Average the steering angle towards these datapoints to get the needed steering angle
-    closestAngles = []
-    for index in indexArr:
-        closestAngles.append(steeringMatrix[index])
-
-    global steeringAngle
-    steeringAngle = sum(closestAngles)/len(closestAngles)
-    
-
     # ----- Turning implementation 
     # Declare variables for the implementation
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
@@ -133,7 +96,6 @@ def scan_callback(scan):
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
-    global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
     
 
@@ -159,7 +121,7 @@ def pid(rate_hz, prevError, prevIntegral):
 
     print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
-    return adjustSpeed, error, integral
+    return steeringAngle, adjustSpeed, error, integral
 
     
             
