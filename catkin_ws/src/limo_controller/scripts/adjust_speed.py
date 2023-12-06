@@ -96,6 +96,7 @@ def scan_callback(scan):
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
+    global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
     
 
@@ -121,6 +122,7 @@ def pid(rate_hz, prevError, prevIntegral):
 
     print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
+    global steeringAngle
     return steeringAngle, adjustSpeed, error, integral
 
     
