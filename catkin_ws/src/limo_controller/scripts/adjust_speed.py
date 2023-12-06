@@ -58,16 +58,11 @@ def scan_callback(scan):
         lastNZdist = mean
     else:
         distance = lastNZdist
-
     
     if closest_distance != float('inf'):
         closest_distances.append(closest_distance)
         closest_degrees.append(closest_degree)
-    if len(closest_distances) >= 5:
-        ave_closest_dist = sum(closest_distances)/len(closest_distances)
-        ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
 
-        print("[closest distance, closest degree]: ", ave_closest_dist, ave_closest_degree)
 
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
@@ -88,11 +83,22 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    print("[Distance, Adjustment]: ", distance,adjustSpeed)
+    #print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     return adjustSpeed, error, integral
 
+def adjust_angle():
+    newAngle = 0
+
+    if len(closest_distances) < 5:
+        return None
+
+
+    ave_closest_dist = sum(closest_distances)/len(closest_distances)
+    ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
+    print("[closest distance, closest degree]: ", ave_closest_dist, ave_closest_degree)
     
+    return newAngle
             
 
         
