@@ -19,7 +19,7 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
-steeringAngle = None
+global steeringAngle
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -63,6 +63,7 @@ def scan_callback(scan):
     else:
         distance = lastNZdist
 
+    print("Distance: ", distance)
     # ----- Turning implementation 
     # Declare variables for the implementation
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
@@ -98,7 +99,7 @@ def scan_callback(scan):
 
     global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
-    print("[steeringAngle]: ", steeringAngle)
+    print("[Steering Angle]: ", steeringAngle)
     
 
 def pid(rate_hz, prevError, prevIntegral):
