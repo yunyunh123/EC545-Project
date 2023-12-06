@@ -18,15 +18,18 @@ def main(turnDistances):
     
     try:
         numHalfTurnAngle = int(len(turnDistances) / 2)
+
+        # Calculate the distances for the right and left sides of the data set
+        distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
+        distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
     except ZeroDivisionError:
-        numHalfTurnAngle = 0 
-    
-    # Calculate the distances for the right and left sides of the data set
-    distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
-    distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
+        numHalfTurnAngle = 0
+        distBetweenMeasurementsLeft = 0
+        distBetweenMeasurementsRight = 0
     
     # Calculate the steering angle towards each datapoint and insert into an array
     turnAngle = LEFT_SENSOR_VAL
+    
     for index, dataPoint in enumerate(turnDistances):
         steeringMatrix[index] = turnAngle
 
