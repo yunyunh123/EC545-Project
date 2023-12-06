@@ -16,8 +16,6 @@ def main(turnDistances):
     # Declare variables for the implementation
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     numHalfTurnAngle = int(int(len(turnDistances))/2)
-    #rightSideSteeringAngles = [0] * (numHalfTurnAngle) # holds steering angles for turning right (0 to RIGHT_SENSOR_VAL)
-    #leftSideSteeringAngles = [0] * (numHalfTurnAngle) # holds steering angles for turning left (LEFT_SENSOR_VAL to 0)
     
     # Calculate the distances for the right and left sides of the data set
     distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
@@ -47,9 +45,10 @@ def main(turnDistances):
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
-    averageSteeringAngle = sum(closestAngles)/len(closestAngles)
+    global steeringAngle
+    steeringAngle = sum(closestAngles)/len(closestAngles)
     
-    return averageSteeringAngle # Return the steering angle based on LiDAR data
+    return steeringAngle # Return the steering angle based on LiDAR data
 
 if __name__ == '__main__':
     turnDistances = [10.1, 10.2, 12.5, 20.3, 20.0, 21.1, 21.1, 10.0, 10.0, 10.1, 10.2, 10.3, 11.2, 13.1, 16.4, 20.1, 21.2, 6.3, 3.1, 4.1, 5.0, 4.1, 6.2, 7.3]
