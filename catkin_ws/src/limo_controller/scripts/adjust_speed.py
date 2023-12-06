@@ -19,7 +19,7 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
-steeringAngle
+global steeringAngle
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
