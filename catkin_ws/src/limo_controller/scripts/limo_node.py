@@ -82,6 +82,7 @@ if __name__ == '__main__':
         if not ULT_LDR:
             steeringAngle, adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
             prevError = error
+            
             #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
             newSpeed = leaderSpeed + adjustSpeed
             if STOP:
@@ -92,7 +93,8 @@ if __name__ == '__main__':
                 newSpeed = -MAX_SPEED #0
 
             print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
-            
+            print("{New Steering Angle}: ", steeringAngle)
+
             mylimo.SetMotionCommand(linear_vel=float(newSpeed))
             mylimo.SetMotionCommand(steering_angle=float(steeringAngle))
 
