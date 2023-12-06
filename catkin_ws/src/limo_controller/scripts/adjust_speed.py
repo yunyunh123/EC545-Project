@@ -8,6 +8,8 @@ SETPT = 0.4
 MIN_DIST = SETPT - 0.02
 MAX_DIST = SETPT + 0.02
 
+INTEGRAL_MAX=0.5 #Adjusts max and min values for integral response
+
 Kp = 0.7 # Proportional constant
 Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
@@ -54,11 +56,14 @@ def pid(rate_hz, prevError, prevIntegral):
     else:
         error = 0
     # PID algorithm
+    #proportional = max(min(error,2),-2)
     proportional = error
-    integral =min(prevIntegral + error,1)
-    derivative = error - prevError
+    derivative = error-prevError
+    integral = max(min(prevIntegral + error,INTEGRAL_MAX),-INTEGRAL_MAX)
+    #derivative = max(min(error - prevError,2),-2)
     output = Kp * proportional + Ki * integral + Kd * derivative
-
+    output = output*1.2
+    print("[P, I, D]", proportional, integral, derivative)
     '''
     Expected "output" value:
         * 0 : no error
