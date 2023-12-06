@@ -4,8 +4,8 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
-LEFT_SENSOR_VAL = .85956 # all positive values are left
-RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
+LEFT_SENSOR_VAL = -.85956 # all negative values are left
+RIGHT_SENSOR_VAL = 0.5576 # all positive values are right
 
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 15 # percent
