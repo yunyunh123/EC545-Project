@@ -1,6 +1,6 @@
 <launch>
-  <node name="ydlidar_node_1"  pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
-    <param name="id" type="string" value="1"/>
+  <node name="ydlidar_node_2"  pkg="ydlidar_ros"  type="ydlidar_node" output="screen" respawn="false" >
+    <param name="id" type="string" value="2"/>
     <param name="port"         type="string" value="/dev/ydlidar"/>  
     <param name="baudrate"         type="int" value="115200"/>  
     <param name="frame_id"     type="string" value="laser_link"/>
