@@ -19,24 +19,24 @@ RATE_HZ = 5
 
 MAX_SPEED = 1.0
 
-DEBUG_STATE = True
+DEBUG_STATE = False
 
 STOP = False
+
+leaderSpeed = 0
 
 def state_callback(msg: String):
     msg = str(msg)
     msg = msg.replace('"', '').replace("data: ", "")
     id, lin_vel, steer_angle = msg.split(";")
     
-    '''
     isLeader = int(id) == (LIMO_ID - 1)
     if isLeader:
-        print("Here: ", id, lin_vel, steer_angle)
-        mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
-    '''
-    isLeader = int(id) == (LIMO_ID - 1)
-    if isLeader:
-        mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
+        global leaderSpeed
+        leaderSpeed = lin_vel
+        
+        #mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
+    
     if DEBUG_STATE:
         print("Received: ", id, lin_vel, steer_angle)
 
@@ -78,13 +78,16 @@ if __name__ == '__main__':
         pub_state.publish(getCurrentState(mylimo, LIMO_ID))         
         adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
         prevError = error
-        newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
+        #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
+        newSpeed = leaderSpeed + adjustSpeed
         if STOP:
             newSpeed = 0
         elif newSpeed > MAX_SPEED:
             newSpeed = MAX_SPEED
         elif newSpeed < (0):
             newSpeed = 0
+
+        print("New speed: ", newSpeed)
         mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
         rate.sleep()

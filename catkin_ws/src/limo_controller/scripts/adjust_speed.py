@@ -4,13 +4,13 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
-SETPT = 0.3
-MIN_DIST = 0.15
-MAX_DIST = 0.45
+SETPT = 0.4
+MIN_DIST = SETPT - 0.15
+MAX_DIST = SETPT + 0.15
 
-Kp = 0.4 # Proportional constant
+Kp = 0.05 # Proportional constant
 Ki = 0 # Integral constant
-Kd = 1.5 # Derivative constant
+Kd = 0.2 # Derivative constant
 
 distance = 0
 
