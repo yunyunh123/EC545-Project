@@ -3,10 +3,12 @@ from sensor_msgs.msg import LaserScan
 
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
-TURN_ANGLE_RANGE = 30 # degrees
-TURN_CLOSEST_PERCENT = 10 # percent
 
-WHEELBASE = 8 # inches
+LEFT_SENSOR_VAL = .85956 # all positive values are left
+RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
+
+TURN_ANGLE_RANGE = 35 # degrees
+TURN_CLOSEST_PERCENT = 15 # percent
 
 SETPT = 0.3
 MIN_DIST = 0.15
@@ -21,17 +23,6 @@ steeringAngle = 0
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
-
-def ackermannSteeringAngle(turn_radius):
-    # NOT CORRECT
-
-    # Calculate Ackermann steering angle in radians
-    delta_radians = math.atan(WHEELBASE / turn_radius)
-
-    # Convert radians to degrees
-    delta_degrees = math.degrees(delta_radians)
-
-    return delta_degrees
 
 # Get lidar data
 def scan_callback(scan):
@@ -68,25 +59,26 @@ def scan_callback(scan):
     global distance
     distance = mean
 
-    # ----- Turning implementation 
+# ----- Turning implementation 
     # Declare variables for the implementation
-    steeringMatrix = np.empty(len(turnDistances)) # array that holds steering angle with same indexes as the turn distances
-
-    # Calculate the degree each datapoint is relative
-    totalDegreesCovered = TURN_ANGLE_RANGE * 2
-    distBetweenMeasurements = totalDegreesCovered / (len(turnDistances) - 1)
+    steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
+    numHalfTurnAngle = int(int(len(turnDistances))/2)
+    
+    # Calculate the distances for the right and left sides of the data set
+    distBetweenMeasurementsLeft = LEFT_SENSOR_VAL / numHalfTurnAngle
+    distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
     
     # Calculate the steering angle towards each datapoint and insert into an array
-
-    turnAngle = TURN_ANGLE_RANGE * -1
+    turnAngle = LEFT_SENSOR_VAL
     for index, dataPoint in enumerate(turnDistances):
-        """
-        Caculation here.
-        """
-        
-        # REPLACE WITH CALCULATED EQUATION RESULT - Currently saves degrees of each value
-        steeringMatrix[index] = turnAngle 
-        turnAngle = turnAngle + distBetweenMeasurements
+        steeringMatrix[index] = turnAngle
+
+        if index < numHalfTurnAngle: # handle the left side
+            turnAngle = turnAngle - distBetweenMeasurementsLeft
+        elif index > numHalfTurnAngle: # handle the right side
+            turnAngle = turnAngle + distBetweenMeasurementsRight
+        elif index == numHalfTurnAngle: # handle the center
+            turnAngle = 0
 
     # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
@@ -103,8 +95,6 @@ def scan_callback(scan):
     global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
     
-    
-
 
 def pid(rate_hz, prevError, prevIntegral):
 
