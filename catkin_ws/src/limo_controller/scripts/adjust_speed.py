@@ -4,11 +4,11 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
-LEFT_SENSOR_VAL = -.85956 # all negative values are left
-RIGHT_SENSOR_VAL = 0.5576 # all positive values are right
+LEFT_SENSOR_VAL = -.85956 # left
+RIGHT_SENSOR_VAL = 0.5576 # right
 
 TURN_ANGLE_RANGE = 35 # degrees
-TURN_CLOSEST_PERCENT = 15 # percent
+TURN_CLOSEST_PERCENT = 10 # percent
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -76,8 +76,6 @@ def scan_callback(scan):
         distBetweenMeasurementsRight = RIGHT_SENSOR_VAL / numHalfTurnAngle
     except ZeroDivisionError:
         numHalfTurnAngle = 0 
-    
-
     
     # Calculate the steering angle towards each datapoint and insert into an array
     turnAngle = LEFT_SENSOR_VAL
