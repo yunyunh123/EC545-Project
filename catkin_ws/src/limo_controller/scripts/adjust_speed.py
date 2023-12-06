@@ -8,9 +8,9 @@ SETPT = 0.4
 MIN_DIST = SETPT - 0.15
 MAX_DIST = SETPT + 0.15
 
-Kp = 0.9 # Proportional constant
-Ki = 0.05 # Integral constant
-Kd = 0.3 # Derivative constant
+Kp = 0.7 # Proportional constant
+Ki = 0.04 # Integral constant
+Kd = 0.30 # Derivative constant
 
 distance = 0
 
