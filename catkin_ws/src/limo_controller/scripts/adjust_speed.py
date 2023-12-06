@@ -10,12 +10,6 @@ RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 15 # percent
 
-LEFT_SENSOR_VAL = .85956 # all positive values are left
-RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
-
-TURN_ANGLE_RANGE = 35 # degrees
-TURN_CLOSEST_PERCENT = 15 # percent
-
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
 MAX_DIST = SETPT + 0.15
@@ -106,7 +100,7 @@ def scan_callback(scan):
     steeringAngle = sum(closestAngles)/len(closestAngles)
     
 
-# ----- Turning implementation 
+    # ----- Turning implementation 
     # Declare variables for the implementation
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     numHalfTurnAngle = int(int(len(turnDistances))/2)
