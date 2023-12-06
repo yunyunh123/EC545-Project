@@ -19,6 +19,7 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
+steeringAngle = None
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -123,4 +124,7 @@ def pid(rate_hz, prevError, prevIntegral):
     print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     global steeringAngle
+    if steeringAngle == None:
+        steeringAngle = 0
+
     return steeringAngle, adjustSpeed, error, integral
