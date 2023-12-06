@@ -19,7 +19,7 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
-global steeringAngle
+steeringAngle = 0
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -103,7 +103,6 @@ def scan_callback(scan):
     
 
 def pid(rate_hz, prevError, prevIntegral):
-
     error = SETPT - distance
 
     # PID algorithm
