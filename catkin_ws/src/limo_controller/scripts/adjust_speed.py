@@ -124,12 +124,3 @@ def pid(rate_hz, prevError, prevIntegral):
 
     global steeringAngle
     return steeringAngle, adjustSpeed, error, integral
-
-    
-            
-
-        
-        
-
-
-                
