@@ -35,7 +35,7 @@ def state_callback(msg: String):
     isLeader = int(id) == (LIMO_ID - 1)
     if isLeader:
         global leaderSpeed
-        leaderSpeed = lin_vel
+        leaderSpeed = float(lin_vel)
         
         #mylimo.SetMotionCommand(linear_vel=float(lin_vel), steering_angle=float(steer_angle))
     
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     rospy.loginfo("Limo node " + NODE + str(LIMO_ID) + " has been started.")
     pub_state = rospy.Publisher(TOPIC_STATE, String, queue_size=QUEUE_SZ)
     print("Publishing to: ", TOPIC_STATE)
-    if ULT_LDR:
+    if not ULT_LDR:
         print("Subscribing to: ", TOPIC_STATE, ", ", TOPIC_LIDAR)
         sub_state = rospy.Subscriber(TOPIC_STATE, String, callback=state_callback)
         sub_lidar = rospy.Subscriber(TOPIC_LIDAR, LaserScan, callback=scan_callback)
@@ -88,10 +88,10 @@ if __name__ == '__main__':
                 newSpeed = 0
             elif newSpeed > MAX_SPEED:
                 newSpeed = MAX_SPEED
-            elif newSpeed < (0):
-                newSpeed = 0
+            elif newSpeed < -MAX_SPEED:
+                newSpeed = -MAX_SPEED #0
 
-            print("New speed: ", newSpeed)
+            print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
             mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
         rate.sleep()
