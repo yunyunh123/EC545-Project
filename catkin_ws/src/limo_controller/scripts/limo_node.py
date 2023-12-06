@@ -19,7 +19,9 @@ RATE_HZ = 5
 
 MAX_SPEED = 1.0
 
+# for debugging
 DEBUG_STATE = False
+DEBUG_ADJUST_SPEED = False
 
 STOP = False
 
@@ -79,7 +81,7 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         pub_state.publish(getCurrentState(mylimo, LIMO_ID))
 
-        if not ULT_LDR:
+        if not ULT_LDR and DEBUG_ADJUST_SPEED:
             adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
             prevError = error
             #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed

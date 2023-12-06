@@ -13,6 +13,8 @@ Ki = 0.04 # Integral constant
 Kd = 0.30 # Derivative constant
 
 distance = 0
+closest_distances = []
+closest_degrees = []
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -21,9 +23,20 @@ def rad2deg(x):
 def scan_callback(scan):
     count = math.floor(scan.scan_time / scan.time_increment)
     distances = []
-    
+    closest_distance = float('inf')
+    closest_degree = 0
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
+
+        # Find closest object
+        if i < len(scan.ranges):
+            dist = scan.ranges[i]
+            if dist > 0 and dist < closest_distance:
+                closest_distance = dist
+                closest_degree = degree
+
+        #print(degree, scan.ranges[i])
+
 
         # Only take LiDAR data in front of limo
         if degree >= (-1 * ANGLE_RANGE) and degree < ANGLE_RANGE:
@@ -45,6 +58,16 @@ def scan_callback(scan):
         lastNZdist = mean
     else:
         distance = lastNZdist
+
+    
+    if closest_distance != float('inf'):
+        closest_distances.append(closest_distance)
+        closest_degrees.append(closest_degree)
+    if len(closest_distances) >= 5:
+        ave_closest_dist = sum(closest_distances)/len(closest_distances)
+        ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
+
+        print("[closest distance, closest degree]: ", ave_closest_dist, ave_closest_degree)
 
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
