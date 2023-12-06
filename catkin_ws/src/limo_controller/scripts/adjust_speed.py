@@ -53,6 +53,7 @@ def scan_callback(scan):
                 print(degree, dist, i)
     
     # Average the data
+    ''' Maybe move down to update_speed()?
     mean = 0
     if len(distances) > 0:
         mean = sum(distances) / len(distances)
@@ -64,7 +65,7 @@ def scan_callback(scan):
         lastNZdist = mean
     else:
         distance = lastNZdist
-    
+    '''
 
     if closest_distance != float('inf'):
         closest_distances.append(closest_distance)
@@ -103,6 +104,8 @@ def adjust_angle():
 
     ave_closest_dist = sum(closest_distances)/len(closest_distances)
     ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
+    global distance
+    distance = ave_closest_dist
 
     # potentially set degree to 0 if its within "front" range
 

@@ -22,7 +22,7 @@ MAX_SPEED = 1.0
 # for debugging
 DEBUG_STATE = False
 DEBUG_ADJUST_SPEED = False
-DEBUG_ADJUST_ANGLE = True
+DEBUG_ADJUST_ANGLE = False
 
 STOP = False
 
@@ -104,6 +104,9 @@ if __name__ == '__main__':
                 print(newAngle)
                 mylimo.SetMotionCommand(steering_angle=newAngle)
             #print(mylimo.GetSteeringAngle())
+
+            mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle = newAngle)
+
 
 
 
