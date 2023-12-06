@@ -23,6 +23,8 @@ DEBUG_STATE = False
 
 STOP = False
 
+ULT_LDR = (LIMO_ID == 0)
+
 leaderSpeed = 0
 
 def state_callback(msg: String):
@@ -59,7 +61,7 @@ if __name__ == '__main__':
     rospy.loginfo("Limo node " + NODE + str(LIMO_ID) + " has been started.")
     pub_state = rospy.Publisher(TOPIC_STATE, String, queue_size=QUEUE_SZ)
     print("Publishing to: ", TOPIC_STATE)
-    if LIMO_ID != 0:
+    if ULT_LDR:
         print("Subscribing to: ", TOPIC_STATE, ", ", TOPIC_LIDAR)
         sub_state = rospy.Subscriber(TOPIC_STATE, String, callback=state_callback)
         sub_lidar = rospy.Subscriber(TOPIC_LIDAR, LaserScan, callback=scan_callback)
@@ -75,19 +77,21 @@ if __name__ == '__main__':
     prevError = 0
     integral = 0
     while not rospy.is_shutdown():
-        pub_state.publish(getCurrentState(mylimo, LIMO_ID))         
-        adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
-        prevError = error
-        #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
-        newSpeed = leaderSpeed + adjustSpeed
-        if STOP:
-            newSpeed = 0
-        elif newSpeed > MAX_SPEED:
-            newSpeed = MAX_SPEED
-        elif newSpeed < (0):
-            newSpeed = 0
+        pub_state.publish(getCurrentState(mylimo, LIMO_ID))
 
-        print("New speed: ", newSpeed)
-        mylimo.SetMotionCommand(linear_vel=float(newSpeed))
+        if not ULT_LDR:
+            adjustSpeed, error, integral = pid(RATE_HZ, prevError, integral)
+            prevError = error
+            #newSpeed = mylimo.GetLinearVelocity() + adjustSpeed
+            newSpeed = leaderSpeed + adjustSpeed
+            if STOP:
+                newSpeed = 0
+            elif newSpeed > MAX_SPEED:
+                newSpeed = MAX_SPEED
+            elif newSpeed < (0):
+                newSpeed = 0
+
+            print("New speed: ", newSpeed)
+            mylimo.SetMotionCommand(linear_vel=float(newSpeed))
 
         rate.sleep()
