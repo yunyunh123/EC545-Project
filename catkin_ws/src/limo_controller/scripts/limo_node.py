@@ -101,9 +101,9 @@ if __name__ == '__main__':
             
             newAngle = adjust_angle()
             if DEBUG_ADJUST_ANGLE and newAngle:
-                print(newAngle) 
-                #mylimo.SetMotionCommand(steering_angle=float(newAngle))
-            print(mylimo.GetSteeringAngle())
+                print(newAngle)
+                mylimo.SetMotionCommand(steering_angle=newAngle)
+            #print(mylimo.GetSteeringAngle())
 
 
 
