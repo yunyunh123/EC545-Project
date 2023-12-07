@@ -8,7 +8,7 @@ ANGLE_ESTIMATE = 60
 LEFT_SENSOR_VAL = .85956 # left
 RIGHT_SENSOR_VAL = -0.5576 # right
 
-TURN_ANGLE_RANGE = 40 # degrees
+TURN_ANGLE_RANGE = 20 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
 TURN_ERROR_TOLERANCE = .1
 TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 9 # three datapoints per degree, take this measurement thrice
@@ -40,6 +40,7 @@ def scan_callback(scan):
         # Only take LiDAR data in front of limo
         if degree >= (-1 * ANGLE_RANGE) and degree < ANGLE_RANGE:
             dist = scan.ranges[i]
+            print(degree)
             if dist > 0:
                 distances.append(dist)
             if DEBUG_LIDAR:
@@ -68,7 +69,7 @@ def scan_callback(scan):
 
     # ----- Turning implementation     
     if len(turnDistances) > 10: # if we have a sufficient sample
-        print("Distances: ", turnDistances, "\n")
+        #print("Distances: ", turnDistances, "\n")
         # Calculate the what datapoints are the closest
         numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
         sortedDistances = sorted(turnDistances, key=lambda x: x[0])
@@ -91,7 +92,7 @@ def scan_callback(scan):
                 steeringAngle = potentialAngle
         except ZeroDivisionError:
             next
-        print("Steering angle: ", steeringAngle)
+        #print("Steering angle: ", steeringAngle)
     else:
         next # skip and wait for more data
 
