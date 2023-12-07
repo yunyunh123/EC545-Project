@@ -66,15 +66,7 @@ def scan_callback(scan):
     else:
         distance = lastNZdist
 
-    # ----- Turning implementation 
-    # make sure the matrix does not get too big
-
-    '''
-    while len(turnDistances) > TURN_DISTANCE_SIZE:
-        turnDistances.pop(0)
-    print("Distance array: ", turnDistances, "\n")
-    '''
-    
+    # ----- Turning implementation     
     # Calculate the what datapoints are the closest
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
@@ -93,16 +85,15 @@ def scan_callback(scan):
             potentialAngle = averageAngle / 60.0
 
             if averageAngle > 0:
-                steeringAngle = potentialAngle
+                steeringAngle = potentialAngle * 1.1 # to account for greater max value on this end
             elif averageAngle < 0:
                 steeringAngle = potentialAngle
-
         except ZeroDivisionError:
             next
-
         print("Steering angle: ", steeringAngle)
+        print(closestDistances, "\n")
     else:
-        next
+        next # skip and wait for more data
 
 def pid(rate_hz, prevError, prevIntegral):
 
