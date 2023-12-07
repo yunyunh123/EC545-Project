@@ -8,9 +8,9 @@ LEFT_SENSOR_VAL = .85956 # all positive values are left
 RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
 
 TURN_ANGLE_RANGE = 35 # degrees
-TURN_CLOSEST_PERCENT = 20 # percent
+TURN_CLOSEST_PERCENT = 10 # percent
 TURN_ERROR_TOLERANCE = .1
-TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 3.1 # three datapoints per degree
+TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 4 # three datapoints per degree
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -77,20 +77,20 @@ def scan_callback(scan):
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
     closestDistances = sortedDistances[:numCloseValues]
 
-    print(closestDistances)
-
-    # Average the steering angle towards these datapoints to get the needed steering angle
+    # Get the angles from the closest distances
     closestAngles = []
     for dist, degree in closestDistances:
         closestAngles.append(degree)
 
+    # Average the angles and convert to a steering angle
     global steeringAngle
-
     try:
-        steeringAngle = sum(closestAngles)/len(closestAngles)
+        averageAngle = sum(closestAngles)/len(closestAngles)
+        steeringAngle = averageAngle / 60.0
+
     except ZeroDivisionError:
         next
-    
+
     print("Steering angle: ", steeringAngle)
 
 def pid(rate_hz, prevError, prevIntegral):
