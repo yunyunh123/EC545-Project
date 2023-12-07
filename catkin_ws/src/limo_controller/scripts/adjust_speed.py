@@ -9,6 +9,7 @@ RIGHT_SENSOR_VAL = 0.5576 # right
 
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
+TURN_ERROR_TOLERANCE = .1
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -86,7 +87,6 @@ def pid(rate_hz, prevError, prevIntegral):
         adjustSpeed = -1 * output
 
     steeringAngle = adjustAngle()
-    print("new steeringAngle: ", steeringAngle)
     if steeringAngle == None:
         steeringAngle = 0
 
@@ -96,7 +96,9 @@ def adjustAngle():
     # ----- Turning implementation 
     # Declare variables for the implementation
     global turnDistances
+    oldAngle = adjustedAngle
     adjustedAngle = 0
+
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     
     # Calculate the distances for the right and left sides of the data set
@@ -128,10 +130,9 @@ def adjustAngle():
     closestDistances = sortedDistances[:numCloseValues]
 
     indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
-    print("Close values: ", closestDistances)
 
     if len(closestDistances) == 0:
-        print("The array is empty")
+        return adjustedAngle
     else:
         print("The array is not empty")
 
@@ -141,7 +142,8 @@ def adjustAngle():
         closestAngles.append(steeringMatrix[index])
 
     try:
-        adjustedAngle = sum(closestAngles)/len(closestAngles)
+        if abs(oldAngle - adjustedAngle) > TURN_ERROR_TOLERANCE:
+            adjustedAngle = sum(closestAngles)/len(closestAngles)
         return adjustedAngle
     except ZeroDivisionError:
         return adjustedAngle
