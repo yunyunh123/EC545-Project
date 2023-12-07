@@ -78,18 +78,15 @@ def scan_callback(scan):
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
     closestDistances = sortedDistances[:numCloseValues]
 
-    print(sortedDistances)
-
-    indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
-
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
-    for index in indexArr:
-        #closestAngles.append(steeringMatrix[index])
-        next
+    for index in closestDistances:
+        closestAngles.append(closestDistances, key=lambda x: x[1])
+    print(closestAngles)
 
     global steeringAngle
     steeringAngle = sum(closestAngles)/len(closestAngles)
+    print("Steering angle: ", steeringAngle)
 
 def pid(rate_hz, prevError, prevIntegral):
 
@@ -110,10 +107,9 @@ def pid(rate_hz, prevError, prevIntegral):
     adjustSpeed = 0
     if output != 0:
         adjustSpeed = -1 * output
-
-    print("[Distance, Adjustment]: ", distance,adjustSpeed)
-
-    return adjustSpeed, error, integral
+    
+    global steeringAngle
+    return steeringAngle, adjustSpeed, error, integral
 
     
             
