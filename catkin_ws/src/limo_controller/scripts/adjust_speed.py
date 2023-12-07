@@ -20,11 +20,15 @@ MIN_ANGLE = -0.574 # right
 MAX_ANGLE = 0.85956 # left
 FRONT_ANGLE_RANGE = 20
 
+MEAN_COUNT = 5
+
 distance = 0
 closest_distances = []
 closest_degrees = []
 closest_distance = 0
 closest_degree = 0
+
+
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -77,6 +81,7 @@ def scan_callback(scan):
         #print("[closest distance, closest degree]: ", closest_distance, closest_degree)
 
 def pid(rate_hz, prevError, prevIntegral):
+    global distance
     if distance < MIN_DIST: 
         error = MIN_DIST - distance
     elif distance > MAX_DIST:
@@ -91,7 +96,7 @@ def pid(rate_hz, prevError, prevIntegral):
     #derivative = max(min(error - prevError,2),-2)
     output = Kp * proportional + Ki * integral + Kd * derivative
     output = output*1.2
-    print("[P, I, D]", proportional, integral, derivative)
+    #print("[P, I, D]", proportional, integral, derivative)
     '''
     Expected "output" value:
         * 0 : no error
@@ -111,9 +116,14 @@ def adjust_angle():
         return None
 
     newAngle = 0
-    while len(closest_distances) > 7:
+    while len(closest_distances) > MEAN_COUNT:
         closest_distances.pop(0)
         closest_degrees.pop(0)
+
+    #ave_closest_dist = 0
+    #for i in range(1, len(closest_distances) + 1):
+        
+
 
     ave_closest_dist = sum(closest_distances)/len(closest_distances)
     ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
@@ -123,6 +133,6 @@ def adjust_angle():
     # potentially set degree to 0 if its within "front" range
 
     newAngle = ave_closest_degree / 60.0
-    #print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
+    print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
     return float(newAngle)
 
