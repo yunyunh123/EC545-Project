@@ -20,6 +20,7 @@ Kd = 0.30 # Derivative constant
 
 distance = 0
 steeringAngle = 0
+turnDistances = []
 
 def rad2deg(x):
     return (x * 180.0) / math.pi
@@ -28,7 +29,7 @@ def rad2deg(x):
 def scan_callback(scan):
     count = math.floor(scan.scan_time / scan.time_increment)
     distances = []
-    turnDistances = []
+    global turnDistances
     
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
@@ -64,9 +65,36 @@ def scan_callback(scan):
         distance = lastNZdist
 
     print("Distance: ", distance)
+    
+def pid(rate_hz, prevError, prevIntegral):
+    error = SETPT - distance
 
+    # PID algorithm
+    proportional = error
+    integral = prevIntegral + error
+    derivative = error - prevError
+    output = Kp * proportional + Ki * integral + Kd * derivative
+
+    '''
+    Expected "output" value:
+        * 0 : no error
+        * + : front limo is too close
+        * - : front limo is too far
+    '''
+    adjustSpeed = 0
+    if output != 0:
+        adjustSpeed = -1 * output
+
+    steeringAngle = adjustAngle
+    if steeringAngle == None:
+        steeringAngle = 0
+
+    return steeringAngle, adjustSpeed, error, integral
+
+def adjustAngle():
     # ----- Turning implementation 
     # Declare variables for the implementation
+    global turnDistances
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     
     # Calculate the distances for the right and left sides of the data set
@@ -92,8 +120,7 @@ def scan_callback(scan):
         elif index == numHalfTurnAngle: # handle the center
             turnAngle = 0
 
-    # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
-    
+    # Calculate the what datapoints are the closest
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
     sortedDistances = sorted(turnDistances)
     closestDistances = sortedDistances[:numCloseValues]
@@ -101,39 +128,18 @@ def scan_callback(scan):
     indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
     print("Close values: ", closestDistances)
 
+    if len(closestDistances) == 0:
+        print("The array is empty")
+    else:
+        print("The array is not empty")
+
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
-    global steeringAngle
-
     try:
-        steeringAngle = sum(closestAngles)/len(closestAngles)
+        adjustedAngle = sum(closestAngles)/len(closestAngles)
+        return adjustedAngle
     except ZeroDivisionError:
-        steeringAngle = steeringAngle 
-    
-def pid(rate_hz, prevError, prevIntegral):
-    error = SETPT - distance
-
-    # PID algorithm
-    proportional = error
-    integral = prevIntegral + error
-    derivative = error - prevError
-    output = Kp * proportional + Ki * integral + Kd * derivative
-
-    '''
-    Expected "output" value:
-        * 0 : no error
-        * + : front limo is too close
-        * - : front limo is too far
-    '''
-    adjustSpeed = 0
-    if output != 0:
-        adjustSpeed = -1 * output
-
-    global steeringAngle
-    if steeringAngle == None:
-        steeringAngle = 0
-
-    return steeringAngle, adjustSpeed, error, integral
+        adjustedAngle = adjustedAngle
