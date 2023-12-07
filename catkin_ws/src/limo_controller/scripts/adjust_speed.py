@@ -85,7 +85,9 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    steeringAngle = adjustAngle
+    newAngle = adjustAngle
+    steeringAngle = 0
+    print("new steeringAngle: ", steeringAngle)
     if steeringAngle == None:
         steeringAngle = 0
 
@@ -95,6 +97,7 @@ def adjustAngle():
     # ----- Turning implementation 
     # Declare variables for the implementation
     global turnDistances
+    adjustedAngle = 0
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     
     # Calculate the distances for the right and left sides of the data set
@@ -142,4 +145,4 @@ def adjustAngle():
         adjustedAngle = sum(closestAngles)/len(closestAngles)
         return adjustedAngle
     except ZeroDivisionError:
-        adjustedAngle = adjustedAngle
+        return adjustedAngle
