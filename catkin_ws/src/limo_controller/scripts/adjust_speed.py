@@ -5,8 +5,12 @@ DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
 SETPT = 0.4
-MIN_DIST = SETPT - 0.15
-MAX_DIST = SETPT + 0.15
+
+MIN_DIST = SETPT - 0.02
+MAX_DIST = SETPT + 0.02
+
+INTEGRAL_MAX=0.5 #Adjusts max and min values for integral response
+
 
 Kp = 0.7 # Proportional constant
 Ki = 0.04 # Integral constant
@@ -73,14 +77,21 @@ def scan_callback(scan):
         #print("[closest distance, closest degree]: ", closest_distance, closest_degree)
 
 def pid(rate_hz, prevError, prevIntegral):
-    error = SETPT - distance
-
+    if distance < MIN_DIST: 
+        error = MIN_DIST - distance
+    elif distance > MAX_DIST:
+        error =  MAX_DIST - distance
+    else:
+        error = 0
     # PID algorithm
+    #proportional = max(min(error,2),-2)
     proportional = error
-    integral = prevIntegral + error
-    derivative = error - prevError
+    derivative = error-prevError
+    integral = max(min(prevIntegral + error,INTEGRAL_MAX),-INTEGRAL_MAX)
+    #derivative = max(min(error - prevError,2),-2)
     output = Kp * proportional + Ki * integral + Kd * derivative
-
+    output = output*1.2
+    print("[P, I, D]", proportional, integral, derivative)
     '''
     Expected "output" value:
         * 0 : no error
