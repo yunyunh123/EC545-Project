@@ -99,6 +99,10 @@ def adjustAngle():
 
     oldAngle = adjustedAngle
 
+    #make sure the matrix does not get too big
+    while len(turnDistances) > 30:
+        turnDistances.pop(0)
+
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     
     # Calculate the distances for the right and left sides of the data set
