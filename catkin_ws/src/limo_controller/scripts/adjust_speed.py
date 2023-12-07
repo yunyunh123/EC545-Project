@@ -81,11 +81,16 @@ def scan_callback(scan):
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
     for index in closestDistances:
-        closestAngles.append(closestDistances, key=lambda x: x[1])
+        closestAngles.append(closestDistances[i][1])
     print(closestAngles)
 
     global steeringAngle
-    steeringAngle = sum(closestAngles)/len(closestAngles)
+
+    try:
+        steeringAngle = sum(closestAngles)/len(closestAngles)
+    except ZeroDivisionError:
+        next
+    
     print("Steering angle: ", steeringAngle)
 
 def pid(rate_hz, prevError, prevIntegral):
