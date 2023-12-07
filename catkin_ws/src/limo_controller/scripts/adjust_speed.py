@@ -4,7 +4,7 @@ from sensor_msgs.msg import LaserScan
 DEBUG_LIDAR = False
 ANGLE_RANGE = 6
 
-ANGLE_ESTIMATE = 45
+ANGLE_ESTIMATE = 60
 LEFT_SENSOR_VAL = .85956 # left
 RIGHT_SENSOR_VAL = -0.5576 # right
 
@@ -92,15 +92,13 @@ def scan_callback(scan):
             potentialAngle = averageAngle / 60.0
             print("Potential steering angle: ", potentialAngle)
 
-            if ((potentialAngle < .05) and (potentialAngle > -.05)):
-                steeringAngle = 0
+
+            if averageAngle > 0:
+                steeringAngle = averageAngle / (ANGLE_ESTIMATE / LEFT_SENSOR_VAL)
+            elif averageAngle < 0:
+                steeringAngle = averageAngle / (ANGLE_ESTIMATE / RIGHT_SENSOR_VAL)
             else:
-                if averageAngle > 0:
-                    steeringAngle = averageAngle / (ANGLE_ESTIMATE / LEFT_SENSOR_VAL)
-                elif averageAngle < 0:
-                    steeringAngle = averageAngle / (ANGLE_ESTIMATE / RIGHT_SENSOR_VAL)
-                else:
-                    steeringAngle = 0
+                steeringAngle = 0
 
         except ZeroDivisionError:
             next
