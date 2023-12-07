@@ -91,8 +91,7 @@ if __name__ == '__main__':
             elif newSpeed < -MAX_SPEED:
                 newSpeed = -MAX_SPEED #0
 
-            newSpeed = 0
-            print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
+            newSpeed = 0 # REMOVE AFTER TEST
             mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle=float(adjustSteering))
 
         rate.sleep()
