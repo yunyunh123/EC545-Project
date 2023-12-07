@@ -46,7 +46,7 @@ def scan_callback(scan):
                 print(degree, dist, i)
 
         # Get LiDAR data from wider range
-        if degree >= (-1 * TURN_ANGLE_RANGE) and degree < TURN_ANGLE_RANGE:
+        if degree >= (-1 * TURN_ANGLE_RANGE) and (degree < TURN_ANGLE_RANGE):
             dist = scan.ranges[i]
             if dist > 0:
                 turnDistances.append((dist, degree))
