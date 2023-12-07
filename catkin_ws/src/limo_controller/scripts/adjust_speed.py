@@ -141,13 +141,15 @@ def adjustAngle():
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
-    print("New angle is different by: ", abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE)
+    print("closent steering angles: ", closestAngles)
+    
     try:
         adjustedAngle = sum(closestAngles)/len(closestAngles)
         
         if (abs(oldAngle - adjustedAngle) <= TURN_ERROR_TOLERANCE):
+            print("no adjustment done")
             adjustedAngle = oldAngle
-            
+
         return adjustedAngle
     except ZeroDivisionError:
         return adjustedAngle
