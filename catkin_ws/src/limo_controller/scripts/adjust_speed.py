@@ -50,7 +50,7 @@ def scan_callback(scan):
             
             dist = scan.ranges[i]
             if dist > 0:
-                turnDistances.append(dist, degree)
+                turnDistances.append((dist, degree))
 
             if DEBUG_LIDAR:
                 print(degree, dist, i)
