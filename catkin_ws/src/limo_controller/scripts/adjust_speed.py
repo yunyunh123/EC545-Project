@@ -10,6 +10,7 @@ RIGHT_SENSOR_VAL = 0.5576 # right
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
 TURN_ERROR_TOLERANCE = .1
+TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 3 # three datapoints per degree
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -100,7 +101,7 @@ def adjustAngle():
     oldAngle = adjustedAngle
 
     #make sure the matrix does not get too big
-    while len(turnDistances) > 50:
+    while len(turnDistances) > TURN_DISTANCE_SIZE:
         turnDistances.pop(0)
 
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
