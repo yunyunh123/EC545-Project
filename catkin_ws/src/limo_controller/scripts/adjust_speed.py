@@ -97,6 +97,8 @@ def adjustAngle():
     # ----- Turning implementation 
     # Declare variables for the implementation
     global turnDistances
+    global adjustedAngle
+
     oldAngle = adjustedAngle
     adjustedAngle = 0
 
