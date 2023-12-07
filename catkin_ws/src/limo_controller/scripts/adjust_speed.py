@@ -100,7 +100,6 @@ def adjustAngle():
     global adjustedAngle
 
     oldAngle = adjustedAngle
-    adjustedAngle = 0
 
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
     
@@ -137,7 +136,7 @@ def adjustAngle():
     if len(closestDistances) == 0:
         return adjustedAngle
     else:
-        print("The array is not empty")
+        next
 
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
@@ -145,7 +144,7 @@ def adjustAngle():
         closestAngles.append(steeringMatrix[index])
 
     try:
-        if abs(oldAngle - adjustedAngle) > TURN_ERROR_TOLERANCE:
+        if abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE:
             adjustedAngle = sum(closestAngles)/len(closestAngles)
         return adjustedAngle
     except ZeroDivisionError:
