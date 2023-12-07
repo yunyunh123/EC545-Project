@@ -29,7 +29,6 @@ closest_distance = 0
 closest_degree = 0
 
 
-
 def rad2deg(x):
     return (x * 180.0) / math.pi
 
@@ -48,32 +47,39 @@ def scan_callback(scan):
             if dist > 0 and dist < closest_distance:
                 closest_distance = dist
                 closest_degree = degree
-
+            if dist > 0:
+                distances.append(dist)
+            
+        if degree <= 90 and degree >= 60:
+            test = scan.ranges[i]
+            #if test>0:
+                #print("degree, test: ", degree, test)
         #print(degree, scan.ranges[i])
-
-
+        
+        '''
         # Only take LiDAR data in front of limo
         if degree >= (-1 * ANGLE_RANGE) and degree < ANGLE_RANGE:
             dist = scan.ranges[i]
             if dist > 0:
                 distances.append(dist)
-            if DEBUG_LIDAR:
-                print(degree, dist, i)
-    
+        '''
+
     # Average the data
-    ''' Maybe move down to update_speed()?
+    distances = sorted(distances)[:MEAN_COUNT]
+    #print(distances)
     mean = 0
     if len(distances) > 0:
         mean = sum(distances) / len(distances)
+    print(mean)
     global lastNZdist
     global distance
-    #distance = mean
+    
     if mean>0:
         distance = mean
         lastNZdist = mean
     else:
         distance = lastNZdist
-    '''
+
 
     if closest_distance != float('inf'):
         closest_distances.append(closest_distance)
@@ -107,7 +113,7 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    print("[Distance, Adjustment]: ", distance,adjustSpeed)
+    #print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     return adjustSpeed, error, integral
 
@@ -120,19 +126,30 @@ def adjust_angle():
         closest_distances.pop(0)
         closest_degrees.pop(0)
 
-    #ave_closest_dist = 0
-    #for i in range(1, len(closest_distances) + 1):
-        
+    ave_closest_dist = 0
+    ave_closest_degree = 0
+    div = 0
+    for i in range(len(closest_distances)):
+        div += i + 1
+        ave_closest_dist += closest_distances[i] * (i+1)
+        ave_closest_degree += closest_degrees[i] * (i+1)
+    ave_closest_dist = ave_closest_dist / div
+    ave_closest_degree = ave_closest_degree / div 
 
 
-    ave_closest_dist = sum(closest_distances)/len(closest_distances)
-    ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
-    global distance
-    distance = ave_closest_dist
-
+    #ave_closest_dist = sum(closest_distances)/len(closest_distances)
+    #ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
     # potentially set degree to 0 if its within "front" range
+    if ave_closest_degree < 15 and ave_closest_degree > -15:
+        ave_closest_degree = 0.001    
+    
 
     newAngle = ave_closest_degree / 60.0
-    print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
+    #print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
+
+
+    #global distance
+    #distance = ave_closest_dist
+
     return float(newAngle)
 
