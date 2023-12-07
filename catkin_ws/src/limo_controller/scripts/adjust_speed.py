@@ -21,6 +21,7 @@ Kd = 0.30 # Derivative constant
 
 distance = 0
 steeringAngle = 0
+adjustedAngle = 0
 turnDistances = []
 
 def rad2deg(x):
