@@ -68,6 +68,7 @@ def scan_callback(scan):
 
     # ----- Turning implementation 
     # make sure the matrix does not get too big
+
     '''
     while len(turnDistances) > TURN_DISTANCE_SIZE:
         turnDistances.pop(0)
@@ -90,15 +91,11 @@ def scan_callback(scan):
         try:
             averageAngle = sum(closestAngles)/len(closestAngles)
             potentialAngle = averageAngle / 60.0
-            print("Potential steering angle: ", potentialAngle)
-
 
             if averageAngle > 0:
-                steeringAngle = averageAngle / (ANGLE_ESTIMATE / LEFT_SENSOR_VAL)
+                steeringAngle = potentialAngle
             elif averageAngle < 0:
-                steeringAngle = averageAngle / (ANGLE_ESTIMATE / RIGHT_SENSOR_VAL)
-            else:
-                steeringAngle = 0
+                steeringAngle = potentialAngle
 
         except ZeroDivisionError:
             next
