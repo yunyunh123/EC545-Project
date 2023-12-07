@@ -93,11 +93,13 @@ def scan_callback(scan):
             turnAngle = 0
 
     # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
+    
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
     sortedDistances = sorted(turnDistances)
     closestDistances = sortedDistances[:numCloseValues]
 
     indexArr = [turnDistances.index(value) for value in closestDistances] # the index values of the closest values
+    print("Close values: ", closestDistances)
 
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
@@ -110,8 +112,6 @@ def scan_callback(scan):
         steeringAngle = sum(closestAngles)/len(closestAngles)
     except ZeroDivisionError:
         steeringAngle = steeringAngle 
-    
-    print("[Steering Angle]: ", steeringAngle)
     
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
@@ -131,8 +131,6 @@ def pid(rate_hz, prevError, prevIntegral):
     adjustSpeed = 0
     if output != 0:
         adjustSpeed = -1 * output
-
-    print("[Distance, Adjustment]: ", distance,adjustSpeed)
 
     global steeringAngle
     if steeringAngle == None:
