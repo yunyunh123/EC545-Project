@@ -98,7 +98,7 @@ def pid(rate_hz, prevError, prevIntegral):
     #proportional = max(min(error,2),-2)
     proportional = error
     derivative = error-prevError
-    integral = max(min(prevIntegral + error,INTEGRAL_MAX),-1 * INTEGRAL_MAX)
+    integral = max(min(prevIntegral + error,INTEGRAL_MAX),-INTEGRAL_MAX)
     #derivative = max(min(error - prevError,2),-2)
     output = Kp * proportional + Ki * integral + Kd * derivative
     output = output*1.2
@@ -146,7 +146,7 @@ def adjust_angle():
 
 
     global distance
-    print("[degree, dist]", ave_closest_degree, distance)
+    #print("[degree, dist]", ave_closest_degree, distance)
 
     return float(newAngle)
 
