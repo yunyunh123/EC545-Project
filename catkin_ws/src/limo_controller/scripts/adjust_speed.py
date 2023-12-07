@@ -87,8 +87,13 @@ def scan_callback(scan):
     global steeringAngle
     try:
         averageAngle = sum(closestAngles)/len(closestAngles)
-        steeringAngle = averageAngle / 60.0
+        potentialAngle = averageAngle / 60.0
 
+        if (potentialAngle < .1 and potentialAngle > -.1):
+            steeringAngle = 0
+        else:
+            steeringAngle = averageAngle / 60.0
+        
     except ZeroDivisionError:
         next
 
