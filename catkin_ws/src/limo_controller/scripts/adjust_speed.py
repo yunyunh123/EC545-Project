@@ -68,9 +68,11 @@ def scan_callback(scan):
 
     # ----- Turning implementation 
     # make sure the matrix does not get too big
+    '''
     while len(turnDistances) > TURN_DISTANCE_SIZE:
         turnDistances.pop(0)
     print("Distance array: ", turnDistances, "\n")
+    '''
     
     # Calculate the what datapoints are the closest
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
@@ -78,7 +80,7 @@ def scan_callback(scan):
     closestDistances = sortedDistances[:numCloseValues]
 
     # Get the scan angles from the closest distances
-    if closestDistances:
+    if len(turnDistances) > 10: # if we have a sufficient sample
         closestAngles = []
         for dist, degree in closestDistances:
             closestAngles.append(degree)
