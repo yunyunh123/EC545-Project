@@ -143,9 +143,11 @@ def adjustAngle():
 
     print("New angle is different by: ", abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE)
     try:
-        if abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE:
-            adjustedAngle = sum(closestAngles)/len(closestAngles)
+        adjustedAngle = sum(closestAngles)/len(closestAngles)
         
+        if (abs(oldAngle - adjustedAngle) <= TURN_ERROR_TOLERANCE):
+            adjustedAngle = oldAngle
+            
         return adjustedAngle
     except ZeroDivisionError:
         return adjustedAngle
