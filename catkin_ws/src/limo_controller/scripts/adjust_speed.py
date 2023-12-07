@@ -8,7 +8,7 @@ ANGLE_ESTIMATE = 60
 LEFT_SENSOR_VAL = .85956 # left
 RIGHT_SENSOR_VAL = -0.5576 # right
 
-TURN_ANGLE_RANGE = 20 # degrees
+TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
 TURN_ERROR_TOLERANCE = .1
 TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 9 # three datapoints per degree, take this measurement thrice
