@@ -37,6 +37,7 @@ def scan_callback(scan):
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
 
+        '''
         # Only take LiDAR data in front of limo
         if degree >= (-1 * ANGLE_RANGE) and degree < ANGLE_RANGE:
             dist = scan.ranges[i]
@@ -44,6 +45,7 @@ def scan_callback(scan):
                 distances.append(dist)
             if DEBUG_LIDAR:
                 print(degree, dist, i)
+        '''
 
         # Get LiDAR data from wider range
         if degree >= (-1 * TURN_ANGLE_RANGE) and (degree < TURN_ANGLE_RANGE):
@@ -54,6 +56,7 @@ def scan_callback(scan):
             if DEBUG_LIDAR:
                 print(degree, dist, i)
     
+    '''
     # Average the data
     mean = 0
     if len(distances) > 0:
@@ -66,6 +69,7 @@ def scan_callback(scan):
         lastNZdist = mean
     else:
         distance = lastNZdist
+    '''
 
     # ----- Turning implementation     
     if len(turnDistances) > 10: # if we have a sufficient sample
