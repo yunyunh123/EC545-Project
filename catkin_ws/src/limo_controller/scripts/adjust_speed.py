@@ -81,8 +81,8 @@ def scan_callback(scan):
 
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
-    for index in enumerate(closestDistances):
-        closestAngles.append(closestDistances[index][1])
+    for dist, degree in closestDistances:
+        closestAngles.append(degree)
 
     global steeringAngle
 
