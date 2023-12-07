@@ -10,7 +10,7 @@ RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 5 # percent
 TURN_ERROR_TOLERANCE = .1
-TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 6 # three datapoints per degree, take this measurement twice
+TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 9 # three datapoints per degree, take this measurement thrice
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
