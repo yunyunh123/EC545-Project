@@ -40,7 +40,6 @@ def scan_callback(scan):
         # Only take LiDAR data in front of limo
         if degree >= (-1 * ANGLE_RANGE) and degree < ANGLE_RANGE:
             dist = scan.ranges[i]
-            print(degree)
             if dist > 0:
                 distances.append(dist)
             if DEBUG_LIDAR:
@@ -49,6 +48,7 @@ def scan_callback(scan):
         # Get LiDAR data from wider range
         if degree >= (-1 * TURN_ANGLE_RANGE) and (degree < TURN_ANGLE_RANGE):
             dist = scan.ranges[i]
+            print(degree)
             if dist > 0:
                 turnDistances.append((dist, degree))
             if DEBUG_LIDAR:
