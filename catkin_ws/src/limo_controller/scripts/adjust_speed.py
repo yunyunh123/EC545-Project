@@ -146,7 +146,7 @@ def adjust_angle():
 
 
     global distance
-    print("[degree, dist]", ave_closest_degree, distance)
+    #print("[degree, dist]", ave_closest_degree, distance)
 
     return float(newAngle)
 
