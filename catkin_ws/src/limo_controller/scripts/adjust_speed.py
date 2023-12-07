@@ -7,10 +7,10 @@ ANGLE_RANGE = 6
 LEFT_SENSOR_VAL = -.85956 # left
 RIGHT_SENSOR_VAL = 0.5576 # right
 
-TURN_ANGLE_RANGE = 35 # degrees
+TURN_ANGLE_RANGE = 40 # degrees
 TURN_CLOSEST_PERCENT = 10 # percent
 TURN_ERROR_TOLERANCE = .1
-TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 3 # three datapoints per degree
+TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 3.1 # three datapoints per degree
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -33,7 +33,7 @@ def scan_callback(scan):
     count = math.floor(scan.scan_time / scan.time_increment)
     distances = []
     global turnDistances
-    
+
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
 
