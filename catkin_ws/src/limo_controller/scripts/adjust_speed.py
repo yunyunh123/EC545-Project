@@ -85,8 +85,7 @@ def pid(rate_hz, prevError, prevIntegral):
     if output != 0:
         adjustSpeed = -1 * output
 
-    newAngle = adjustAngle
-    steeringAngle = 0
+    steeringAngle = adjustAngle()
     print("new steeringAngle: ", steeringAngle)
     if steeringAngle == None:
         steeringAngle = 0
