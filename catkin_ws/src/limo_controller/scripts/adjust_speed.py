@@ -72,33 +72,37 @@ def scan_callback(scan):
     while len(turnDistances) > TURN_DISTANCE_SIZE:
         turnDistances.pop(0)
 
+    
     # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
     numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
     closestDistances = sortedDistances[:numCloseValues]
 
-    # Get the angles from the closest distances
-    closestAngles = []
-    for dist, degree in closestDistances:
-        closestAngles.append(degree)
-    print("Closest distance tuples: ", closestDistances)
+    if closestDistances:
+        # Get the angles from the closest distances
+        closestAngles = []
+        for dist, degree in closestDistances:
+            closestAngles.append(degree)
+        print("Closest distance tuples: ", closestDistances)
 
-    # Average the angles and convert to a steering angle
-    global steeringAngle
-    try:
-        averageAngle = sum(closestAngles)/len(closestAngles)
-        potentialAngle = averageAngle / 60.0
-        print("Potential steering angle: ", potentialAngle)
+        # Average the angles and convert to a steering angle
+        global steeringAngle
+        try:
+            averageAngle = sum(closestAngles)/len(closestAngles)
+            potentialAngle = averageAngle / 60.0
+            print("Potential steering angle: ", potentialAngle)
 
-        if ((potentialAngle < .1) and (potentialAngle > -.1)):
-            steeringAngle = 0
-        else:
-            steeringAngle = averageAngle / 60.0
-        
-    except ZeroDivisionError:
+            if ((potentialAngle < .05) and (potentialAngle > -.05)):
+                steeringAngle = 0
+            else:
+                steeringAngle = averageAngle / 60.0
+            
+        except ZeroDivisionError:
+            next
+
+        print("Steering angle: ", steeringAngle)
+    else:
         next
-
-    print("Steering angle: ", steeringAngle)
 
 def pid(rate_hz, prevError, prevIntegral):
 
