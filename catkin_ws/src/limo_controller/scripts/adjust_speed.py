@@ -32,7 +32,6 @@ def scan_callback(scan):
     distances = []
 
     turnDistances = []
-    print("Turn distance arr: ", turnDistances)
     
     for i in range(count):
         degree = rad2deg(scan.angle_min + scan.angle_increment * i)
@@ -78,11 +77,12 @@ def scan_callback(scan):
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
     closestDistances = sortedDistances[:numCloseValues]
 
+    print(closestDistances)
+
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
     for index in closestDistances:
         closestAngles.append(closestDistances[i][1])
-    print(closestAngles)
 
     global steeringAngle
 
