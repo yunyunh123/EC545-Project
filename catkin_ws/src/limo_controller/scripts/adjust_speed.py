@@ -65,8 +65,6 @@ def scan_callback(scan):
         lastNZdist = mean
     else:
         distance = lastNZdist
-
-    print("Distance: ", distance)
     
 def pid(rate_hz, prevError, prevIntegral):
     error = SETPT - distance
@@ -143,9 +141,11 @@ def adjustAngle():
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
+    print("New angle is different by: ", abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE)
     try:
         if abs(oldAngle - adjustedAngle) >= TURN_ERROR_TOLERANCE:
             adjustedAngle = sum(closestAngles)/len(closestAngles)
+        
         return adjustedAngle
     except ZeroDivisionError:
         return adjustedAngle
