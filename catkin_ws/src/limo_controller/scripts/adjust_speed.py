@@ -8,7 +8,7 @@ ANGLE_ESTIMATE = 60
 LEFT_SENSOR_VAL = .85956 # left
 RIGHT_SENSOR_VAL = -0.5576 # right
 
-TURN_ANGLE_RANGE = 35 # degrees
+TURN_ANGLE_RANGE = 40 # degrees
 TURN_CLOSEST_PERCENT = 5 # percent
 TURN_ERROR_TOLERANCE = .1
 TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 9 # three datapoints per degree, take this measurement thrice
@@ -67,13 +67,13 @@ def scan_callback(scan):
         distance = lastNZdist
 
     # ----- Turning implementation     
-    # Calculate the what datapoints are the closest
-    numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
-    sortedDistances = sorted(turnDistances, key=lambda x: x[0])
-    closestDistances = sortedDistances[:numCloseValues]
+    if len(turnDistances) > 10: # if we have a sufficient sample
+        # Calculate the what datapoints are the closest
+        numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
+        sortedDistances = sorted(turnDistances, key=lambda x: x[0])
+        closestDistances = sortedDistances[:numCloseValues]
 
     # Get the scan angles from the closest distances
-    if len(turnDistances) > 10: # if we have a sufficient sample
         closestAngles = []
         for dist, degree in closestDistances:
             closestAngles.append(degree)
