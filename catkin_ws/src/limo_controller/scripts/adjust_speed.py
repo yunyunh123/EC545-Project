@@ -88,8 +88,9 @@ def scan_callback(scan):
     try:
         averageAngle = sum(closestAngles)/len(closestAngles)
         potentialAngle = averageAngle / 60.0
+        print("Potential steering angle: ", potentialAngle)
 
-        if (potentialAngle < .1 and potentialAngle > -.1):
+        if ((potentialAngle < .1) and (potentialAngle > -.1)):
             steeringAngle = 0
         else:
             steeringAngle = averageAngle / 60.0
