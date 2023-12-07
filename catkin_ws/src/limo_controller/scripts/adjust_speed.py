@@ -100,7 +100,7 @@ def adjustAngle():
     oldAngle = adjustedAngle
 
     #make sure the matrix does not get too big
-    while len(turnDistances) > 30:
+    while len(turnDistances) > 50:
         turnDistances.pop(0)
 
     steeringMatrix = [0] * len(turnDistances) # array that holds steering angle with same indexes as the turn distances
@@ -145,7 +145,7 @@ def adjustAngle():
     for index in indexArr:
         closestAngles.append(steeringMatrix[index])
 
-    print("closent steering angles: ", closestAngles)
+    print("closest steering angles: ", closestAngles)
     
     try:
         adjustedAngle = sum(closestAngles)/len(closestAngles)
