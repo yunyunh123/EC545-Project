@@ -7,8 +7,8 @@ ANGLE_RANGE = 6
 LEFT_SENSOR_VAL = .85956 # all positive values are left
 RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
 
-TURN_ANGLE_RANGE = 40 # degrees
-TURN_CLOSEST_PERCENT = 10 # percent
+TURN_ANGLE_RANGE = 35 # degrees
+TURN_CLOSEST_PERCENT = 20 # percent
 TURN_ERROR_TOLERANCE = .1
 TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 3.1 # three datapoints per degree
 
@@ -81,8 +81,8 @@ def scan_callback(scan):
 
     # Average the steering angle towards these datapoints to get the needed steering angle
     closestAngles = []
-    for index in closestDistances:
-        closestAngles.append(closestDistances[i][1])
+    for index in enumerate(closestDistances):
+        closestAngles.append(closestDistances[index][1])
 
     global steeringAngle
 
