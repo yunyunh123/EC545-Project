@@ -10,7 +10,7 @@ RIGHT_SENSOR_VAL = -0.5576 # all negative values are right
 TURN_ANGLE_RANGE = 35 # degrees
 TURN_CLOSEST_PERCENT = 5 # percent
 TURN_ERROR_TOLERANCE = .1
-TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 4 # three datapoints per degree
+TURN_DISTANCE_SIZE = TURN_ANGLE_RANGE * 6 # three datapoints per degree, take this measurement twice
 
 SETPT = 0.4
 MIN_DIST = SETPT - 0.15
@@ -46,11 +46,9 @@ def scan_callback(scan):
 
         # Get LiDAR data from wider range
         if degree >= (-1 * TURN_ANGLE_RANGE) and degree < TURN_ANGLE_RANGE:
-            
             dist = scan.ranges[i]
             if dist > 0:
                 turnDistances.append((dist, degree))
-
             if DEBUG_LIDAR:
                 print(degree, dist, i)
     
@@ -71,19 +69,18 @@ def scan_callback(scan):
     # make sure the matrix does not get too big
     while len(turnDistances) > TURN_DISTANCE_SIZE:
         turnDistances.pop(0)
-
+    print("Distance array: ", turnDistances, "\n")
     
-    # Calculate the what datapoints are the closest (ex. 90% closest datapoints - FINE TUNE PERCENTAGE)
-    numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top * percent
+    # Calculate the what datapoints are the closest
+    numCloseValues = int((TURN_CLOSEST_PERCENT/100) * len(turnDistances)) # number of values in the top x percent
     sortedDistances = sorted(turnDistances, key=lambda x: x[0])
     closestDistances = sortedDistances[:numCloseValues]
 
+    # Get the scan angles from the closest distances
     if closestDistances:
-        # Get the angles from the closest distances
         closestAngles = []
         for dist, degree in closestDistances:
             closestAngles.append(degree)
-        print("Closest distance tuples: ", closestDistances)
 
         # Average the angles and convert to a steering angle
         global steeringAngle
@@ -96,7 +93,6 @@ def scan_callback(scan):
                 steeringAngle = 0
             else:
                 steeringAngle = averageAngle / 60.0
-            
         except ZeroDivisionError:
             next
 
