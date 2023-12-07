@@ -109,8 +109,8 @@ if __name__ == '__main__':
             '''
         
             newAngle = adjust_angle()
-            #if newAngle:
-                #mylimo.SetMotionCommand(steering_angle = float(newAngle))#linear_vel=float(newSpeed), steering_angle = newAngle)
+            if newAngle:
+                mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle = newAngle)
 
 
 

@@ -70,7 +70,7 @@ def scan_callback(scan):
     mean = 0
     if len(distances) > 0:
         mean = sum(distances) / len(distances)
-    print(mean)
+    #print(mean)
     global lastNZdist
     global distance
     
@@ -136,10 +136,7 @@ def adjust_angle():
     ave_closest_dist = ave_closest_dist / div
     ave_closest_degree = ave_closest_degree / div 
 
-
-    #ave_closest_dist = sum(closest_distances)/len(closest_distances)
-    #ave_closest_degree = sum(closest_degrees)/len(closest_degrees)
-    # potentially set degree to 0 if its within "front" range
+    # set degree to 0 if its within "front" range
     if ave_closest_degree < 15 and ave_closest_degree > -15:
         ave_closest_degree = 0.001    
     
@@ -148,8 +145,8 @@ def adjust_angle():
     #print("[angle, degree, dist]: ", newAngle, ave_closest_degree, ave_closest_dist)
 
 
-    #global distance
-    #distance = ave_closest_dist
+    global distance
+    print("[degree, dist]", ave_closest_degree, distance)
 
     return float(newAngle)
 
