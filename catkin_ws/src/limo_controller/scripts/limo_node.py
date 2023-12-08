@@ -19,7 +19,10 @@ RATE_HZ = 5
 
 MAX_SPEED = 1.0
 
+# for debugging
 DEBUG_STATE = False
+DEBUG_ADJUST_SPEED = False
+DEBUG_ADJUST_ANGLE = False
 
 STOP = False
 
@@ -91,7 +94,29 @@ if __name__ == '__main__':
             elif newSpeed < -MAX_SPEED:
                 newSpeed = -MAX_SPEED #0
 
-            print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
-            mylimo.SetMotionCommand(linear_vel=float(newSpeed))
+            #print("{New speed, Leader speed}: ", newSpeed, leaderSpeed)
+
+            '''
+            if DEBUG_ADJUST_SPEED:
+                mylimo.SetMotionCommand(linear_vel=float(newSpeed))
+
+            
+            newAngle = adjust_angle()
+            if DEBUG_ADJUST_ANGLE and newAngle:
+                print(newAngle)
+                mylimo.SetMotionCommand(steering_angle=newAngle)
+            #print(mylimo.GetSteeringAngle())
+            '''
+        
+            newAngle = adjust_angle()
+
+            if newSpeed < 0:
+                newAngle = -newAngle
+            print("newSpeed, newAngle: ", newSpeed, newAngle)
+            if newAngle:
+                mylimo.SetMotionCommand(linear_vel=float(newSpeed), steering_angle = newAngle)
+
+
+
 
         rate.sleep()
