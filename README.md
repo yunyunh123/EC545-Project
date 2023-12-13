@@ -70,11 +70,16 @@ Run the following commands:
     * Ensure node is on the same local WiFi as central controller
     * export ROS_MASTER_URI=http://X.X.X.X:11311
     * export ROS_IP=Y.Y.Y.Y
+    
+6) In catkin_ws/src/limo_controller/scripts/limo_node.py, change LIMO_ID to the correct id value (0 to n, where n+1 is the number of limos)
+
+7) In catkin_ws/src/ydlidar_ros/launch/limo_lidar.launch, change the node name to "ydlidar_node_<id>" and the id parameter to "<id>". 
 
 ### Run code
 1) Get LiDAR data
-    * roslaunch ydlidar_ros X2L.launch
-    * rosrun ydlidar_ros ydlidar_client
+    * roslaunch ydlidar_ros limo_lidar
+2) In catkin_ws/src/limo_controller/scripts:
+    * Run python3 limo_node.py
 
 ### Potential errors and solutions
 1) catkin_make
